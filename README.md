@@ -1,57 +1,7 @@
-# BÁO CÁO PHÂN TÍCH DỮ LIỆU NHÀ HÀNG (TIPS DATASET)
 
-> **Học phần:** Khoa học Dữ liệu trong Kinh tế & Kinh doanh  
-> **Ngôn ngữ & Thư viện:** Python 3 | Pandas  
-> **Phương pháp luận:** Quy trình chuẩn CRISP-DM (Cross-Industry Standard Process for Data Mining)  
-> **Bộ dữ liệu:** `tips.csv`
+## 2. Câu 1: Khai phá dữ liệu cơ bản
 
----
-
-## MỤC LỤC
-1. [Giới thiệu & Mục tiêu nghiệp vụ (Business Understanding)](#1-giới-thiệu--mục-tiêu-nghiệp-vụ)
-2. [Thiết lập môi trường & Nạp dữ liệu](#2-thiết-lập-môi-trường--nạp-dữ-liệu)
-3. [Câu 1: Khai phá dữ liệu cơ bản (Data Understanding)](#3-câu-1-khai-phá-dữ-liệu-cơ-bản)
-4. [Câu 2: Phân tích hóa đơn theo thời gian ăn & số lượng người](#4-câu-2-phân-tích-hóa-đơn-theo-thời-gian-ăn--số-lượng-người)
-5. [Câu 3: Phân tích so sánh khách hút thuốc và không hút thuốc](#5-câu-3-phân-tích-so-sánh-khách-hút-thuốc-và-không-hút-thuốc)
-6. [Câu 4: Đánh giá khách hàng vào các ngày cuối tuần](#6-câu-4-đánh-giá-khách-hàng-vào-các-ngày-cuối-tuần)
-7. [Kết luận & Đề xuất giải pháp kinh doanh](#7-kết-luận--đề-xuất-giải-pháp-kinh-doanh)
-8. [Cấu trúc repository & Hướng dẫn thực thi](#8-cấu-trúc-repository--hướng-dẫn-thực-thi)
-
----
-
-## 1. Giới thiệu & Mục tiêu nghiệp vụ
-
-Dự án phân tích dữ liệu kinh doanh được triển khai dựa trên **quy trình chuẩn CRISP-DM**. Thay vì chỉ lập trình đơn thuần, dự án tập trung vào tư duy phân tích: đặt câu hỏi kinh doanh, thấu hiểu dữ liệu, phát hiện quy luật và diễn giải kết quả nhằm hỗ trợ nhà quản lý tối ưu hóa vận hành nhà hàng.
-
-### Mục tiêu phân tích cụ thể:
-* **Khám phá tổng quan:** Đánh giá quy mô, tính toàn vẹn và các phân phối thống kê cốt lõi của dữ liệu.
-* **Tối ưu hóa công suất phục vụ:** Đo lường sự khác biệt về hóa đơn giữa các bữa ăn (Trưa/Tối) và quy mô bàn ăn để sắp xếp nhân sự, bàn ghế.
-* **Phân khúc hành vi:** So sánh nhóm khách hút thuốc và không hút thuốc về mức chi tiêu và thói quen trả tiền boa.
-* **Chiến lược cuối tuần:** Xác định phân khúc khách hàng chủ lực (Nam/Nữ) và khung giờ vàng vào Thứ Bảy & Chủ Nhật để thiết kế chiến dịch marketing phù hợp.
-
----
-
-## 2. Thiết lập môi trường & Nạp dữ liệu
-
-Theo quy chuẩn của thư viện Pandas, dữ liệu dạng bảng được đọc từ tệp CSV trực tuyến về cấu trúc **DataFrame**:
-
-```python
-import pandas as pd
-
-# Đường dẫn nạp bộ dữ liệu
-url = "https://raw.githubusercontent.com/mwaskom/seaborn-data/master/tips.csv"
-df = pd.read_csv(url)
-
-# Kiểm tra trực quan 5 dòng đầu tiên
-df.head()
-```
-
----
-
-## 3. Câu 1: Khai phá dữ liệu cơ bản
-
-### 3.1. Mã nguồn Python thực hiện
-
+### 2.1. Code
 ```python
 # 1. Kiểm tra kích thước bảng dữ liệu (thuộc tính .shape trả về số dòng, số cột)
 print("Kích thước bảng dữ liệu (dòng, cột):", df.shape)
@@ -67,7 +17,7 @@ print(df.isna().sum())
 df.describe()
 ```
 
-### 3.2. Bảng kết quả thống kê mô tả (`df.describe()`)
+### 2.2. Bảng kết quả thống kê mô tả (`df.describe()`)
 
 | Đại lượng | `total_bill` (Tổng hóa đơn) | `tip` (Tiền boa) | `size` (Số người/bàn) |
 | :--- | :---: | :---: | :---: |
@@ -80,17 +30,17 @@ df.describe()
 | **75%** (Tứ phân vị 3) | $24.13 | $3.56 | 3.00 |
 | **max** (Lớn nhất) | $50.81 | $10.00 | 6.00 |
 
-### 3.3. Nhận xét phân tích
-* **Quy mô & Cấu trúc:** Tập dữ liệu gồm **244 quan sát (dòng)** và **7 thuộc tính (cột)**. Trong đó gồm 3 biến định lượng (`total_bill`, `tip`, `size`) và 4 biến định tính phân loại (`sex`, `smoker`, `day`, `time`).
-* **Độ sạch của dữ liệu:** Bảng dữ liệu hoàn toàn toàn vẹn, **không có giá trị khuyết thiếu nào (`isna().sum() = 0` trên toàn bộ các cột)**, sẵn sàng cho các phân tích tiếp theo mà không cần xử lý điền khuyết hay loại bỏ dòng lỗi.
+### 2.3. Nhận xét phân tích
+* **Quy mô & Cấu trúc:** Tập dữ liệu gồm **244  (dòng)** và **7 t (cột)**. Trong đó gồm 3 biến định lượng (`total_bill`, `tip`, `size`) và 4 biến định tính phân loại (`sex`, `smoker`, `day`, `time`).
+* **Độ sạch của dữ liệu:** Bảng dữ liệu hoàn toàn sạch, **không có giá trị khuyết thiếu nào (`isna().sum() = 0` trên toàn bộ các cột)**, sẵn sàng cho các phân tích tiếp theo mà không cần xử lý điền khuyết hay loại bỏ dòng lỗi.
 * **Phân phối giá trị hóa đơn:** Giá trị trung bình (`mean = $19.79`) lớn hơn trung vị (`median = $17.80`), kết hợp giá trị cực đại lên tới `$50.81` cho thấy phân phối chi tiêu có xu hướng **lệch phải**. Phần lớn các bàn ăn chi tiêu trong khoảng `$13.35 - $24.13`, và có một số ít bàn chi tiêu cao vượt trội kéo trung bình lên.
 * **Quy mô phục vụ:** Bàn **2 người** là quy mô phổ biến nhất (chiếm hơn 60% tổng số lượt khách của nhà hàng).
 
 ---
 
-## 4. Câu 2: Phân tích hóa đơn theo thời gian ăn & số lượng người
+## 3. Câu 3: Phân tích hóa đơn theo thời gian ăn & số lượng người
 
-### 4.1. Mã nguồn Python thực hiện
+### 3.1. code
 
 ```python
 # 1. Thống kê hóa đơn theo bữa ăn (time)
@@ -109,7 +59,7 @@ print("\n--- Hóa đơn trung bình theo Bữa ăn x Quy mô bàn ---")
 print(df_time_size)
 ```
 
-### 4.2. Bảng kết quả tổng hợp
+### 3.2. Bảng kết quả tổng hợp
 
 #### a) Theo thời gian ăn (`time`):
 | Bữa ăn (`time`) | Số lượng đơn (`count`) | Hóa đơn trung bình (`mean`) | Hóa đơn trung vị (`median`) | Độ lệch chuẩn (`std`) |
@@ -123,7 +73,7 @@ print(df_time_size)
 | **Lunch** | $9.33 | $14.89 | $18.52 | $29.95 | $41.19 | $30.38 |
 | **Dinner** | $5.16 | $17.23 | $24.00 | $28.40 | $27.29 | $48.17 |
 
-### 4.3. Nhận xét phân tích
+### 3.3. Nhận xét phân tích
 * **Khung giờ ăn uống:** Dữ liệu thực tế chỉ ghi nhận 2 bữa: **Trưa (`Lunch`)** và **Tối (`Dinner`)** (không có dữ liệu bữa sáng).
 * **Chênh lệch giữa các bữa ăn:**
   * **Buổi tối là thời điểm tạo doanh thu chủ lực:** Số lượng bàn ăn buổi tối (**176 đơn**) gấp 2.6 lần buổi trưa (**68 đơn**). Mức chi tiêu trung bình buổi tối đạt **$20.80**, cao hơn 21% so với bữa trưa (**$17.17**). Điều này phản ánh tâm lý khách hàng buổi tối thường thoải mái thời gian hơn, gọi thêm món khai vị, tráng miệng và đồ uống có cồn.
@@ -133,9 +83,9 @@ print(df_time_size)
 
 ---
 
-## 5. Câu 3: Phân tích so sánh khách hút thuốc và không hút thuốc
+## 4. Câu 4: Phân tích so sánh khách hút thuốc và không hút thuốc
 
-### 5.1. Mã nguồn Python thực hiện
+### 4.1.code
 
 ```python
 # Tạo cột tính tỷ lệ phần trăm tiền tip trên tổng hóa đơn để so sánh chuẩn xác
@@ -166,11 +116,7 @@ print(so_sanh_smoker)
 ---
 
 ## 6. Câu 4: Đánh giá khách hàng vào các ngày cuối tuần
-
-### 6.1. Mã nguồn Python thực hiện
-
 ```python
-# Bước 1: Áp dụng quy tắc lọc nhiều điều kiện trong Pandas (dùng toán tử '|' và bọc trong ngoặc đơn)
 mask_cuoi_tuan = (df['day'] == 'Sat') | (df['day'] == 'Sun')
 df_cuoi_tuan = df[mask_cuoi_tuan]
 
@@ -213,8 +159,6 @@ print(chi_tieu_cuoi_tuan)
 
 ## 7. Kết luận & Đề xuất giải pháp kinh doanh
 
-Áp dụng mô hình **Kể chuyện bằng dữ liệu (Bối cảnh - Phát hiện - Hành động)** từ học phần:
-
 1. **Bố trí nhân sự và vận hành:**
    * Dồn trọng tâm ca làm việc và nhân viên phục vụ vào **buổi tối**, đặc biệt là tối Thứ Bảy và Chủ Nhật.
    * Ưu tiên sắp xếp sơ đồ bàn ăn dành cho **bàn 2 người và bàn 4 người** vì đây là các nhóm khách chiếm tỷ trọng doanh thu cao nhất.
@@ -224,17 +168,3 @@ print(chi_tieu_cuoi_tuan)
 
 ---
 
-## 8. Cấu trúc repository & Hướng dẫn thực thi
-
-### 8.1. Cấu trúc thư mục repository
-```text
-tips-data-analysis/
-├── README.md               # Báo cáo phân tích chi tiết (Markdown)
-└── tips_analysis.py        # Mã nguồn Python xử lý toàn bộ phân tích
-```
-
-### 8.2. Hướng dẫn chạy mã nguồn
-Chạy trực tiếp tệp phân tích bằng dòng lệnh:
-```bash
-python tips_analysis.py
-```
